@@ -1,76 +1,107 @@
-export default CountDown;
-export class CountDown {
-    static propTypes: {
-        id: any;
-        digitStyle: any;
-        digitTxtStyle: any;
-        timeLabelStyle: any;
-        separatorStyle: any;
-        timeToShow: any;
-        showSeparator: any;
-        size: any;
-        until: any;
-        onChange: any;
-        onPress: any;
-        onFinish: any;
-    };
-    constructor(props: any);
-    state: {
-        until: number;
-        lastUntil: any;
-        wentBackgroundAt: any;
-    };
-    timer: number;
-    componentDidMount(): void;
-    componentWillUnmount(): void;
-    componentDidUpdate(prevProps: any, prevState: any): void;
-    _handleAppStateChange: (currentAppState: any) => void;
-    getTimeLeft: () => {
-        seconds: number;
-        minutes: number;
-        hours: number;
-        days: number;
-    };
-    updateTimer: () => void;
-    renderDigit: (d: any) => any;
-    renderLabel: (label: any) => any;
-    renderDoubleDigits: (label: any, digits: any) => any;
-    renderSeparator: () => any;
-    renderCountDown: () => any;
-    render(): any;
+import { Component } from 'react';
+import { StyleProp, TextStyle, ViewStyle } from 'react-native';
+
+export type DigitType = 'D' | 'H' | 'M' | 'S';
+
+export interface CountDownProps {
+  /**
+   * Counter id, to determine whether to reset the counter or not
+   * @default null
+   */
+  id?: string | null;
+
+  /**
+   * Override the component style
+   * @default {}
+   */
+  style?: StyleProp<ViewStyle>;
+
+  /**
+   *  Digit style
+   * @default {backgroundColor: '#FAB913'}
+   */
+  digitStyle?: StyleProp<ViewStyle>;
+
+  /**
+   * Digit Text style
+   * @default {color: #FAB913 '#000'}
+   */
+  digitTxtStyle?: StyleProp<TextStyle>;
+
+  /**
+   * Time Label style
+   * @default {color: #FAB913 '#000'}
+   */
+  timeLabelStyle?: StyleProp<TextStyle>;
+
+  /**
+   * Separator style
+   * @default {color: #FAB913 '#000'}
+   */
+  separatorStyle?: StyleProp<TextStyle>;
+
+  /**
+   * Size of the countdown component
+   * @default 15
+   */
+  size?: number;
+
+  /**
+   * Number of seconds to countdown
+   * @default 0
+   */
+  until?: number;
+
+  /**
+   * What function should be invoked when the time is 0
+   * @default null
+   */
+  onFinish?: () => void;
+
+  /**
+   * What function should be invoked when the timer is changing
+   * @default null
+   */
+  onChange?: (until: number) => void;
+
+  /**
+   * What function should be invoked when clicking on the timer
+   * @default null
+   */
+  onPress?: () => void;
+
+  /**
+   * What Digits to show
+   * @default ['D', 'H', 'M', 'S']
+   */
+  timeToShow?: DigitType[];
+
+  /**
+   * Text to show in time label
+   * @default {d: 'Days', h: 'Hours', m: 'Minutes', s: 'Seconds'}
+   */
+  timeLabels?: { d?: string; h?: string; m?: string; s?: string };
+
+  /**
+   * Should show separator
+   * @default false
+   */
+  showSeparator?: boolean;
+
+  /**
+   * A boolean to pause and resume the component
+   * @default true
+   */
+  running?: boolean;
 }
-export namespace CountDown {
-    namespace defaultProps {
-        export { DEFAULT_DIGIT_STYLE as digitStyle };
-        export { DEFAULT_DIGIT_TXT_STYLE as digitTxtStyle };
-        export { DEFAULT_TIME_LABEL_STYLE as timeLabelStyle };
-        export { DEFAULT_TIME_LABELS as timeLabels };
-        export { DEFAULT_SEPARATOR_STYLE as separatorStyle };
-        export { DEFAULT_TIME_TO_SHOW as timeToShow };
-        export let showSeparator: boolean;
-        export let until: number;
-        export let size: number;
-        export let running: boolean;
-    }
+
+export interface CountDownState {
+  until: number;
+  lastUntil: number | null;
+  wentBackgroundAt: number | null;
 }
-declare namespace DEFAULT_DIGIT_STYLE {
-    let backgroundColor: string;
-}
-declare namespace DEFAULT_DIGIT_TXT_STYLE {
-    let color: string;
-}
-declare namespace DEFAULT_TIME_LABEL_STYLE {
-    let color_1: string;
-    export { color_1 as color };
-}
-declare namespace DEFAULT_TIME_LABELS {
-    let d: string;
-    let h: string;
-    let m: string;
-    let s: string;
-}
-declare namespace DEFAULT_SEPARATOR_STYLE {
-    let color_2: string;
-    export { color_2 as color };
-}
-declare const DEFAULT_TIME_TO_SHOW: string[];
+
+export default class CountDown extends Component<
+  CountDownProps,
+  CountDownState
+> {}
